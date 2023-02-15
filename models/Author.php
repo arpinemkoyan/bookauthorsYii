@@ -63,7 +63,7 @@ class Author extends \yii\db\ActiveRecord
 
     public function getBooks()
     {
-        return $this->hasMany(Author::class, ['id' => 'book_id'])
+        return $this->hasMany(Book::class, ['id' => 'book_id'])
             ->via('bookAuthors');
     }
 }

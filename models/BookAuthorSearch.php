@@ -64,18 +64,4 @@ class BookAuthorSearch extends BookAuthor
         return $dataProvider;
     }
 
-    public function getDataprovider($modelId)
-    {
-        $query = BookAuthor::find();
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $query->andFilterWhere([
-            'author_id' => $modelId,
-        ]);
-
-        return $dataProvider;
-    }
 }

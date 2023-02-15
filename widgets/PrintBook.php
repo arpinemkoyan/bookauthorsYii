@@ -2,9 +2,8 @@
 
 namespace app\widgets;
 
-use app\models\Book;
-use app\models\BookAuthorSearch;
 use Yii;
+use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
 
 
@@ -15,19 +14,16 @@ class PrintBook extends \yii\bootstrap5\Widget
 
     public function run()
     {
-        $dataProvider = BookAuthorSearch::getDataprovider($this->model->id);
+        $dataProvider = new ArrayDataProvider([
+                'allModels' => $this->model->books
+        ]);
 
         return GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'attribute' => 'book',
-                    'class' => 'yii\grid\DataColumn',
-                    'value' => function ($data) {
-                        return Book::findOne($data->book_id)->name;
-                    },
-                ],
+
+                'name',
             ]
         ]);
 

@@ -15,12 +15,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    <?php if (!empty($model->authors)) {
-        $form->field($model, 'author[]')->textInput(['readonly' => true, 'value' => implode(', ', ArrayHelper::map($model->authors, 'id', 'nickname'))]);
 
-    } ?>
-    <?= $form->field($model, 'author')->widget(Select2::class, [
-        'name' => 'author[]',
+    <?= $form->field($model, 'authorIds')->widget(Select2::class, [
+        'name' => 'authors[]',
         'data' => ArrayHelper::map($authors, 'id', 'nickname'),
         'language' => 'en',
         'options' => [

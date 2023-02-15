@@ -12,6 +12,8 @@ use Yii;
  */
 class Book extends \yii\db\ActiveRecord
 {
+
+    public $authorIds;
     /**
      * {@inheritdoc}
      */
@@ -27,6 +29,7 @@ class Book extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'string', 'max' => 255],
+            [['authorIds'], 'safe']
         ];
     }
 

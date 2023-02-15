@@ -7,6 +7,7 @@ use app\models\Book;
 use app\models\BookAuthor;
 use app\models\BookSearch;
 use Yii;
+use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -71,37 +72,24 @@ class BookController extends Controller
     public function actionCreate()
     {
         $model = new Book();
-        $authors = Author::find()->all();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                //fill BookAuthor
-                $authorsData = $this->request->post()['Book']['author'];
-                $bulkInsertArray = [];
-                foreach ($authorsData as $authorId) {
-                    $bulkInsertArray[] = [
-                        'book_id' => $model->id,
-                        'author_id' => $authorId,
-                    ];
-                }
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
 
-                $columnNames = ['book_id', 'author_id'];
-                Yii::$app->db->createCommand()
-                    ->batchInsert(
-                        'books_authors', $columnNames, $bulkInsertArray
-                    )
-                    ->execute();
-
-
-                return $this->redirect(['view', 'id' => $model->id]);
+            foreach ($model->authorIds as $authorId) {
+                $bookAuthor = new BookAuthor();
+                $bookAuthor->book_id = $model->id;
+                $bookAuthor->author_id = $authorId;
+                $bookAuthor->save();
             }
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             $model->loadDefaultValues();
         }
+        $authors = Author::find()->all();
 
         return $this->render('create', [
             'model' => $model,
-            'author' => $authors
+            'authors' => $authors
         ]);
     }
 
@@ -116,37 +104,25 @@ class BookController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost) {
-            $model->load($this->request->post());
-
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             BookAuthor::deleteAll(['book_id' => $model->id]);
             //fill BookAuthor
-            $authorsData = $this->request->post()['Book']['author'];
-            $bulkInsertArray = [];
-            foreach ($authorsData as $authorId) {
-                $bulkInsertArray[] = [
-                    'book_id' => $model->id,
-                    'author_id' => $authorId,
-                ];
+            foreach ($model->authorIds as $authorId) {
+                $bookAuthor = new BookAuthor();
+                $bookAuthor->book_id = $model->id;
+                $bookAuthor->author_id = $authorId;
+                $bookAuthor->save();
             }
-
-            $columnNames = ['book_id', 'author_id'];
-            Yii::$app->db->createCommand()
-                ->batchInsert(
-                    'books_authors', $columnNames, $bulkInsertArray
-                )
-                ->execute();
-
-            $model->save();
-
             return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            $model->loadDefaultValues();
         }
 
         $authors = Author::find()->all();
 
         return $this->render('update', [
             'model' => $model,
-            'author' => $authors
+            'authors' => $authors
         ]);
     }
 
