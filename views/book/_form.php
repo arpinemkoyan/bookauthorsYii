@@ -6,8 +6,8 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\Books $model */
-/** @var app\models\Authors $authors */
+/** @var app\models\Book $model */
+/** @var app\models\Author $authors */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
@@ -16,11 +16,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?php if (!empty($model->authors)) {
-        $form->field($model, 'authors[]')->textInput(['readonly' => true, 'value' => implode(', ', ArrayHelper::map($model->authors, 'id', 'nickname'))]);
+        $form->field($model, 'author[]')->textInput(['readonly' => true, 'value' => implode(', ', ArrayHelper::map($model->authors, 'id', 'nickname'))]);
 
     } ?>
-    <?= $form->field($model, 'authors')->widget(Select2::class, [
-        'name' => 'authors[]',
+    <?= $form->field($model, 'author')->widget(Select2::class, [
+        'name' => 'author[]',
         'data' => ArrayHelper::map($authors, 'id', 'nickname'),
         'language' => 'en',
         'options' => [

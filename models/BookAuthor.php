@@ -11,17 +11,17 @@ use Yii;
  * @property int|null $book_id
  * @property int|null $author_id
  *
- * @property Authors $author
- * @property Books $book
+ * @property Author $author
+ * @property Book $book
  */
-class BooksAuthors extends \yii\db\ActiveRecord
+class BookAuthor extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'books_authors';
+        return '{{%books_authors}}';
     }
 
     /**
@@ -31,8 +31,8 @@ class BooksAuthors extends \yii\db\ActiveRecord
     {
         return [
             [['book_id', 'author_id'], 'integer'],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Authors::class, 'targetAttribute' => ['author_id' => 'id']],
-            [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Books::class, 'targetAttribute' => ['book_id' => 'id']],
+            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => Author::class, 'targetAttribute' => ['author_id' => 'id']],
+            [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::class, 'targetAttribute' => ['book_id' => 'id']],
         ];
     }
 
@@ -55,7 +55,7 @@ class BooksAuthors extends \yii\db\ActiveRecord
      */
     public function getAuthor()
     {
-        return $this->hasOne(Authors::class, ['id' => 'author_id']);
+        return $this->hasOne(Author::class, ['id' => 'author_id']);
     }
 
     /**
@@ -65,6 +65,6 @@ class BooksAuthors extends \yii\db\ActiveRecord
      */
     public function getBook()
     {
-        return $this->hasOne(Books::class, ['id' => 'book_id']);
+        return $this->hasOne(Book::class, ['id' => 'book_id']);
     }
 }

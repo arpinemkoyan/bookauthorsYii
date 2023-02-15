@@ -5,19 +5,19 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "Books".
+ * This is the model class for table "Book".
  *
  * @property int $id
  * @property string|null $name
  */
-class Books extends \yii\db\ActiveRecord
+class Book extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'Books';
+        return '{{%books}}';
     }
 
     /**
@@ -42,14 +42,21 @@ class Books extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[BooksAuthors]].
+     * Gets query for [[BookAuthor]].
      *
      * @return \yii\db\ActiveQuery
      */
+
+
+    public function getBookAuthors()
+    {
+        return $this->hasMany(BookAuthor::class, ['book_id' => 'id']);
+    }
+
     public function getAuthors()
     {
-        return $this->hasMany(Authors::class, ['id' => 'author_id'])
-            ->viaTable('books_authors', ['book_id' => 'id']);
+        return $this->hasMany(Author::class, ['id' => 'author_id'])
+            ->via('bookAuthors');
     }
 
 }

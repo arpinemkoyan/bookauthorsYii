@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Books;
+use app\models\Author;
 
 /**
- * BooksSearch represents the model behind the search form of `app\models\Books`.
+ * AuthorSearch represents the model behind the search form of `app\models\Author`.
  */
-class BooksSearch extends Books
+class AuthorSearch extends Author
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class BooksSearch extends Books
     {
         return [
             [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['first_name', 'last_name', 'nickname'], 'safe'],
         ];
     }
 
@@ -40,14 +40,13 @@ class BooksSearch extends Books
      */
     public function search($params)
     {
-        $query = Books::find();
+        $query = Author::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         $this->load($params);
 
         if (!$this->validate()) {
@@ -61,7 +60,9 @@ class BooksSearch extends Books
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'first_name', $this->first_name])
+            ->andFilterWhere(['like', 'last_name', $this->last_name])
+            ->andFilterWhere(['like', 'nickname', $this->nickname]);
 
         return $dataProvider;
     }

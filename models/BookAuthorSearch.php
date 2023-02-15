@@ -2,14 +2,15 @@
 
 namespace app\models;
 
+use app\models\Book;
+use yii\base\BaseObject;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Authors;
 
 /**
- * AuthorsSearch represents the model behind the search form of `app\models\Authors`.
+ * BookSearch represents the model behind the search form of `app\models\Book`.
  */
-class AuthorsSearch extends Authors
+class BookAuthorSearch extends BookAuthor
 {
     /**
      * {@inheritdoc}
@@ -17,8 +18,7 @@ class AuthorsSearch extends Authors
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['first_name', 'last_name', 'nickname'], 'safe'],
+            [['book_id', 'author_id'], 'integer'],
         ];
     }
 
@@ -38,15 +38,16 @@ class AuthorsSearch extends Authors
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $modelId)
     {
-        $query = Authors::find();
+        $query = BookAuthor::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -57,12 +58,23 @@ class AuthorsSearch extends Authors
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'author_id' => $modelId,
         ]);
 
-        $query->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'nickname', $this->nickname]);
+        return $dataProvider;
+    }
+
+    public function getDataprovider($modelId)
+    {
+        $query = BookAuthor::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $query->andFilterWhere([
+            'author_id' => $modelId,
+        ]);
 
         return $dataProvider;
     }

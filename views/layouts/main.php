@@ -40,11 +40,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index'],
+            ['label' => 'Home',
                 'items' => [
                     ['label' => 'Home', 'url' => ['/site/index']],
-                    ['label' => 'Books', 'url' => ['books/index']],
-                    ['label' => 'Authors', 'url' => ['/authors/index']]
+                    ['label' => 'Book', 'url' => ['/book/index']],
+                    ['label' => 'Author', 'url' => ['/author/index']]
                 ]
             ],
 //        -------------------------------------------------------------------------

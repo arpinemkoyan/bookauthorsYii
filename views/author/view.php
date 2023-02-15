@@ -1,15 +1,16 @@
 <?php
 
+use app\widgets\PrintBook;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\Books $dataProvider */
-/** @var app\models\Authors $model */
+/** @var app\models\Book $dataProvider */
+/** @var app\models\Author $model */
 
 $this->title = $model->nickname;
-$this->params['breadcrumbs'][] = ['label' => 'Authors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Author', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -38,19 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ]) ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute' => 'book',
-                'class' => 'yii\grid\DataColumn',
-                'value' => function ($data) {
-                    return \app\models\Books::findOne($data->book_id)->name;
-                },
-            ],
-        ]
-    ]) ?>
-
+    <?= PrintBook::widget(['model' => $model]) ?>
 
 </div>

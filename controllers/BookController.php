@@ -2,20 +2,19 @@
 
 namespace app\controllers;
 
-use app\models\Authors;
-use app\models\Books;
-use app\models\BooksAuthors;
-use app\models\BooksSearch;
+use app\models\Author;
+use app\models\Book;
+use app\models\BookAuthor;
+use app\models\BookSearch;
 use Yii;
-use yii\base\BaseObject;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * BooksController implements the CRUD actions for Books model.
+ * BookController implements the CRUD actions for Book model.
  */
-class BooksController extends Controller
+class BookController extends Controller
 {
     /**
      * @inheritDoc
@@ -36,13 +35,13 @@ class BooksController extends Controller
     }
 
     /**
-     * Lists all Books models.
+     * Lists all Book models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new BooksSearch();
+        $searchModel = new BookSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -52,7 +51,7 @@ class BooksController extends Controller
     }
 
     /**
-     * Displays a single Books model.
+     * Displays a single Book model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -65,19 +64,19 @@ class BooksController extends Controller
     }
 
     /**
-     * Creates a new Books model.
+     * Creates a new Book model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Books();
-        $authors = Authors::find()->all();
+        $model = new Book();
+        $authors = Author::find()->all();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                //fill BooksAuthors
-                $authorsData = $this->request->post()['Books']['authors'];
+                //fill BookAuthor
+                $authorsData = $this->request->post()['Book']['author'];
                 $bulkInsertArray = [];
                 foreach ($authorsData as $authorId) {
                     $bulkInsertArray[] = [
@@ -102,12 +101,12 @@ class BooksController extends Controller
 
         return $this->render('create', [
             'model' => $model,
-            'authors' => $authors
+            'author' => $authors
         ]);
     }
 
     /**
-     * Updates an existing Books model.
+     * Updates an existing Book model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -120,9 +119,9 @@ class BooksController extends Controller
         if ($this->request->isPost) {
             $model->load($this->request->post());
 
-            BooksAuthors::deleteAll(['book_id' => $model->id]);
-            //fill BooksAuthors
-            $authorsData = $this->request->post()['Books']['authors'];
+            BookAuthor::deleteAll(['book_id' => $model->id]);
+            //fill BookAuthor
+            $authorsData = $this->request->post()['Book']['author'];
             $bulkInsertArray = [];
             foreach ($authorsData as $authorId) {
                 $bulkInsertArray[] = [
@@ -143,16 +142,16 @@ class BooksController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        $authors = Authors::find()->all();
+        $authors = Author::find()->all();
 
         return $this->render('update', [
             'model' => $model,
-            'authors' => $authors
+            'author' => $authors
         ]);
     }
 
     /**
-     * Deletes an existing Books model.
+     * Deletes an existing Book model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -166,15 +165,15 @@ class BooksController extends Controller
     }
 
     /**
-     * Finds the Books model based on its primary key value.
+     * Finds the Book model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Books the loaded model
+     * @return Book the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Books::findOne(['id' => $id])) !== null) {
+        if (($model = Book::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

@@ -1,24 +1,26 @@
 <?php
 
-use app\models\Books;
+use app\models\Author;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\BooksSearch $searchModel */
+/** @var app\models\AuthorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var app\models\AuthorSearch $searchModel1 */
+/** @var yii\data\ActiveDataProvider $dataProvider1 */
 
-$this->title = 'Books';
+$this->title = 'Author';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="books-index">
+<div class="authors-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Books', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Author', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -30,10 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'name',
+            'first_name',
+            'last_name',
+            'nickname',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Books $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Author $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                 }
             ],
